@@ -8,6 +8,7 @@ if __name__ == "__main__":
     CONFIG_INI = configparser.ConfigParser()
     CONFIG_INI.read("config.ini")
     TOTAL_ENTRIES = int(CONFIG_INI['additional_info']['total_entries'])
+    MAX_RETRIES = int(CONFIG_INI['scrape_settings']['max_retries'])
     LICENCE_FILE = CONFIG_INI['filenames']['licence_file']
 
     try:
@@ -46,10 +47,10 @@ if __name__ == "__main__":
             print('Starting next session.', end='\n\n')
         
         except Exception as e:
-            if retries == 6:
+            if retries == MAX_RETRIES:
                 print(f'Maximum retry limit reached, exiting program.\nError: {e}')
                 break
-            print(f'An unexpected error occured while scraping. Retrying in 30 seconds. (Retries left: {6-retries})')
+            print(f'An unexpected error occured while scraping. Retrying in 30 seconds. (Retries left: {MAX_RETRIES-retries})')
             time.sleep(30)
             retries += 1
             print('Retrying...', end='\n\n')
